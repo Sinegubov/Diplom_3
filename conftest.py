@@ -3,7 +3,7 @@ import pytest
 from selenium import webdriver
 from pages.main_page import MainPage
 from pages.login_page import LoginPage
-from pages.forgot_pass_page import ForgotPasswordPage
+from pages.forgot_password_page import ForgotPasswordPage
 from data import URL
 from helpers.data_generator import UserGenerator
 from helpers.api_requests import APIRequests
@@ -35,8 +35,7 @@ def password_recovery(driver):
 def forgot_pass_page(password_recovery):
     driver = password_recovery
     forgot_pass_page = ForgotPasswordPage(driver)
-    forgot_pass_page.click_email_field()
-    forgot_pass_page.set_email(UserGenerator.generate_user_email())
+    forgot_pass_page.fill_email_field(UserGenerator.generate_user_email())
     forgot_pass_page.click_recover_button()
     return driver
 
