@@ -1,12 +1,14 @@
 import pytest
-
 from selenium import webdriver
+
 from pages.main_page import MainPage
 from pages.login_page import LoginPage
 from pages.forgot_password_page import ForgotPasswordPage
-from data import URL
+
 from helpers.data_generator import UserGenerator
 from helpers.api_requests import APIRequests
+
+from data import URL
 
 
 @pytest.fixture(params=["firefox", "chrome"])
@@ -24,6 +26,7 @@ def driver(request):
         options.add_argument("--disable-web-security")
         options.add_argument("--disable-notifications")
         browser = webdriver.Chrome(options=options)
+        browser.maximize_window()
 
     browser.get(URL.BASE_URL)
     yield browser
@@ -33,18 +36,19 @@ def driver(request):
 @pytest.fixture
 def password_recovery(driver):
     main_page = MainPage(driver)
-    main_page.click_personal_account_button()
+    main_page.click_account_button()
     login_page = LoginPage(driver)
     login_page.click_restore_password_button()
     return driver
 
 
 @pytest.fixture
-def forgot_pass_page(password_recovery):
+def forgot_pass_page(password_recovery, user_data):
+    payload = user_data
     driver = password_recovery
     forgot_pass_page = ForgotPasswordPage(driver)
-    forgot_pass_page.fill_email_field(UserGenerator.generate_user_email())
-    forgot_pass_page.click_recover_button()
+    forgot_pass_page.fill_email_field(payload["email"])
+    forgot_pass_page.click_recovery_button()
     return driver
 
 
@@ -61,15 +65,10 @@ def user_data():
 
 
 @pytest.fixture
-def authorization(driver, user_data):
+def auth_user(driver, user_data):
     payload, token = user_data
     main_page = MainPage(driver)
-    main_page.click_personal_account_button()
+    main_page.click_account_button()
     login_page = LoginPage(driver)
     login_page.login(payload["email"], payload["password"])
     return driver
-
-
-# Корректное отображение юникода в параметризованных тестах
-def pytest_make_parametrize_id(config, val):
-    return repr(val)
