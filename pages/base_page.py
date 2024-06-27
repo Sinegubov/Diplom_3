@@ -1,6 +1,7 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-from selenium.webdriver import ActionChains
+from selenium.webdriver.common.action_chains import ActionChains
+# from selenium.webdriver import ActionChains
 
 
 class BasePage:
@@ -25,6 +26,11 @@ class BasePage:
         WebDriverWait(self.driver, 10).until(
             expected_conditions.visibility_of_element_located(locator))
 
+    def wait_for_visibility_of_element_and_find(self, locator):
+        WebDriverWait(self.driver, 10).until(
+            expected_conditions.visibility_of_element_located(locator))
+        return self.driver.find_element(*locator)
+
     def wait_for_invisibility_of_element(self, locator):
         WebDriverWait(self.driver, 10).until(
             expected_conditions.invisibility_of_element(locator))
@@ -41,6 +47,12 @@ class BasePage:
     def wait_text_in_element(self, locator, text):
         WebDriverWait(self.driver, 15).until(
             expected_conditions.text_to_be_present_in_element(locator, text))
+
+    def action(self):
+        return ActionChains(self.driver)
+
+    def anti_overlay_click(self):  # чтобы не падали тесты на Firefox
+        self.action().move_by_offset(250, 0).click().perform()
 
     def element_displayed(self, locator):
         return self.driver.find_element(*locator).is_displayed()

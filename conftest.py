@@ -12,12 +12,20 @@ from helpers.api_requests import APIRequests
 @pytest.fixture(params=["firefox", "chrome"])
 def driver(request):
     if request.param == "firefox":
-        browser = webdriver.Firefox()
-        browser.get(URL.BASE_URL)
+        options = webdriver.FirefoxOptions()
+        options.add_argument("--width=1920")
+        options.add_argument("--height=1080")
+        options.set_preference('dom.webnotifications.enabled', False)
+        browser = webdriver.Firefox(options=options)
+        browser.maximize_window()
     elif request.param == "chrome":
-        browser = webdriver.Chrome()
-        browser.get(URL.BASE_URL)
+        options = webdriver.ChromeOptions()
+        options.add_argument("--window-size=1920,1080")
+        options.add_argument("--disable-web-security")
+        options.add_argument("--disable-notifications")
+        browser = webdriver.Chrome(options=options)
 
+    browser.get(URL.BASE_URL)
     yield browser
     browser.quit()
 
@@ -51,8 +59,17 @@ def user_data():
     yield data
     APIRequests.delete_user(token)
 
+
+@pytest.fixture
+def authorization(driver, user_data):
+    payload, token = user_data
+    main_page = MainPage(driver)
+    main_page.click_personal_account_button()
+    login_page = LoginPage(driver)
+    login_page.login(payload["email"], payload["password"])
+    return driver
+
+
 # Корректное отображение юникода в параметризованных тестах
-
-
 def pytest_make_parametrize_id(config, val):
     return repr(val)

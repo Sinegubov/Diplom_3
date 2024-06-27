@@ -11,10 +11,10 @@ class ForgotPasswordPage(BasePage):
 
     @allure.step("Заполнить поле Email")
     def fill_email_field(self, email):
-        self.wait_for_element_to_be_clickable(ForgotPasswordLocators.EMAIL_FIELD)
-        self.click_on_element(ForgotPasswordLocators.EMAIL_FIELD)
-        self.send_keys(ForgotPasswordLocators.EMAIL_FIELD, email)
+        self.wait_for_clickable_element(ForgotPasswordLocators.EMAIL_FIELD)
+        self.click_element(ForgotPasswordLocators.EMAIL_FIELD)
+        self.send_value(ForgotPasswordLocators.EMAIL_FIELD, email)
 
     @allure.step("Нажать на кнопу Восстановить")
     def click_recover_button(self):
-        self.click_on_element(ForgotPasswordLocators.RECOVER_BUTTON)
+        self.click_element(ForgotPasswordLocators.RECOVER_BUTTON)
