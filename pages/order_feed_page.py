@@ -19,7 +19,7 @@ class OrderFeedPage(BasePage):
 
     @allure.step("Клик на заказ")
     def click_on_order(self):
-        self.wait_for_click_element(URL.ORDER_URL)
+        self.wait_for_click_element(OrderFeedLocators.ORDER)
         self.click_element(OrderFeedLocators.ORDER)
 
     @allure.step("Проверка появление всплывающего окна с деталями")
@@ -44,8 +44,8 @@ class OrderFeedPage(BasePage):
     @allure.step("Создание нового заказа")
     def create_order(self, user_token):
         token = user_token
-        payload = APIRequests.get_ingredient()
-        requests.post(URL.ORDER_URL, headers={"Authorization": token}, data=payload)
+        ingredient = APIRequests.get_ingredient()
+        requests.post(URL.ORDER_URL, headers={"Authorization": token}, data={"ingredients": ingredient})
 
     @allure.step("Получение номера заказа")
     def get_user_order_number(self, orders_numbers):

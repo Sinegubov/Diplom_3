@@ -1,5 +1,6 @@
 class URL:
     BASE_URL = "https://stellarburgers.nomoreparties.site"
+    MAIN_URL_ = f"{BASE_URL}/"
     USER_REG_URL = f"{BASE_URL}/api/auth/register"
     AUTH_USER_URL = f"{BASE_URL}/api/auth/user"
     ORDER_URL = f"{BASE_URL}/api/orders"

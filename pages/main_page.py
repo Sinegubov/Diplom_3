@@ -30,6 +30,8 @@ class MainPage(BasePage):
 
     @allure.step("Добавление ингредиента в заказ")
     def add_ingredient(self):
+        self.wait_for_visibility_of_element(MainPageLocators.BUN_INGREDIENT)
+        self.wait_for_visibility_of_element(MainPageLocators.BASKET)
         self.drag_and_drop_element(MainPageLocators.BUN_INGREDIENT, MainPageLocators.BASKET)
 
     @allure.step("Нажать на кнопку Оформить заказ")

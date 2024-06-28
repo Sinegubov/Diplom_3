@@ -76,4 +76,5 @@ class BasePage:
     def drag_and_drop_element(self, locator_1, locator_2):
         drag = self.driver.find_element(*locator_1)
         drop = self.driver.find_element(*locator_2)
-        self.action().drag_and_drop(drag, drop).perform()
+        action_chains = ActionChains(self.driver)
+        action_chains.drag_and_drop(drag, drop).perform()

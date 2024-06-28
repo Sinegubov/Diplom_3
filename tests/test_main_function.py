@@ -17,7 +17,7 @@ class TestMainFunction:
         main_page = MainPage(driver)
         current_url = main_page.check_transfer_to_main_page()
 
-        assert current_url == URL.BASE_URL
+        assert current_url == URL.MAIN_URL_
 
     @allure.title("Тест перехода по клику на Лента заказов")
     @allure.description("Переходим в Ленту заказов и сверяем текущую страницу с константой по URL")

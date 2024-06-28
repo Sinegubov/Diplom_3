@@ -43,11 +43,11 @@ def password_recovery(driver):
 
 
 @pytest.fixture
-def forgot_pass_page(password_recovery, user_data):
-    payload = user_data
+def forgot_pass_page(password_recovery):
+    payload = UserGenerator().generate_user_email()
     driver = password_recovery
     forgot_pass_page = ForgotPasswordPage(driver)
-    forgot_pass_page.fill_email_field(payload["email"])
+    forgot_pass_page.fill_email_field(payload)
     forgot_pass_page.click_recovery_button()
     return driver
 
@@ -72,3 +72,15 @@ def auth_user(driver, user_data):
     login_page = LoginPage(driver)
     login_page.login(payload["email"], payload["password"])
     return driver
+
+
+@pytest.fixture
+def orders_numbers(user_data):
+    payload, token = user_data
+    APIRequests.create_order(token)
+    APIRequests.create_order(token)
+    user_orders = APIRequests.get_user_orders(token)
+    orders_numbers = []
+    for order in user_orders:
+        orders_numbers.append(order["number"])
+    return orders_numbers
